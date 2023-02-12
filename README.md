@@ -55,7 +55,10 @@ To validate whether a field's value matches another field's value, just append `
 _The **swal title** will be generated automatically, but you are free to edit the JS file however you want._
 
 ## Configuration
+// TBU
 
 ## Server response
+// TBU
 
 ## Error
+// TBU
