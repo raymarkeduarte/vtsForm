@@ -27,7 +27,7 @@ function vtsForm(form, loadTitle, loadHTML){
              * @returns {string} 
              */
             function fieldName(k){
-                const label = $(field[k]).siblings('label').text();
+                const label = $(field[k]).siblings('label').first().text();
                 const fieldName = trimLabel( label || field[k].placeholder );
                 return fieldName;
             }
