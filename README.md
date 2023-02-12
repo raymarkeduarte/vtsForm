@@ -14,3 +14,6 @@ Validate with a sweet alert, then submit the form using ajax by simply adding a 
 ## Basic Usage
 
 Add the **vts** attribute to your submit button.
+```sh
+<button vts type="button">Submit form</button>
+```
