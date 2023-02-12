@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Bootstrap v5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <!-- jQuery Core 3.6.3 -->
+    <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- vtsForm -->
+    <script src="vtsForm.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>vtsForm - Validate with sweetalert2, then submit form using ajax</h2>
+        <hr>
+        <form class="row g-3" novalidate>
+            <div class="col-md-4">
+                <label for="validationCustom01" class="form-label">First name</label>
+                <input type="text" class="form-control" id="validationCustom01" value="Raymark" required>
+            </div>
+            <div class="col-md-4">
+                <label for="validationCustom02" class="form-label">Last name</label>
+                <input type="text" class="form-control" id="validationCustom02" value="Dela Cruz" required>
+            </div>
+            <div class="col-md-4">
+                <label for="validationCustomUsername" class="form-label">Username</label>
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                    <input type="text" class="form-control" placeholder="Username" id="validationCustomUsername" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="validationCustom03" class="form-label">City</label>
+                <input type="text" class="form-control" id="validationCustom03" required>
+            </div>
+            <div class="col-md-3">
+                <label for="validationCustom04" class="form-label">State</label>
+                <select class="form-select" id="validationCustom04" required>
+                    <option selected disabled value="">Choose...</option>
+                    <option>...</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="validationCustom05" class="form-label">Zip</label>
+                <input type="text" class="form-control" id="validationCustom05" required>
+            </div>
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" vtsWarn="You must" type="checkbox" value="" id="invalidCheck" required>
+                    <label class="form-check-label" for="invalidCheck">
+                    Agree to terms and conditions
+                    </label>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" vts type="button">Submit form</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
