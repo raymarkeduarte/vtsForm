@@ -1,8 +1,8 @@
 # vtsForm
 
-Validate with a sweet alert, then submit the form using ajax by simply adding a vts attribute to your submit button!
+Validate with SweetAlert2, then submit the form using AJAX by simply adding a `vts` attribute to your submit button!
 
-**vtsForm requires jQuery and SweetAlert2**
+### vtsForm requires [jQuery](https://jquery.com) and [SweetAlert2](https://sweetalert2.github.io)
 
 ## Installation
 
