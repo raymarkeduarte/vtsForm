@@ -45,3 +45,17 @@ Add the `vts` attribute to your submit button and use `type="button"`.
 
 # You're all set!
 <img width="470" alt="image" src="https://user-images.githubusercontent.com/108529045/218313594-3ccb6a32-370b-405e-b6b1-38dbcb576ff6.png">
+
+## Confirmation
+To validate whether a field's value matches another field's value, just append `_confirmation` to the name of confirmation field.
+```sh
+<input type="password" name="password" placeholder="New Password" required pattern=".{8,15}" title="Minimum of 8 characters. Maximum of 15 characters">
+<input type="password" name="password_confirmation" placeholder="Repeat Password">
+```
+_The **swal title** will be generated automatically, but you are free to edit the JS file however you want._
+
+## Configuration
+
+## Server response
+
+## Error
