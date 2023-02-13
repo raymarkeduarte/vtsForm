@@ -8,7 +8,7 @@ Validate with SweetAlert2, then submit the form using AJAX by simply adding a `v
 
 ### CDN
 ```sh
-<script src="https://cdn.jsdelivr.net/gh/raymarkeduarte/vtsForm@v1.0.1/vtsForm.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/raymarkeduarte/vtsForm@v1.1.1/vtsForm.js"></script>
 ```
 
 ## Basic Usage
