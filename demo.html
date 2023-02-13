@@ -7,18 +7,19 @@
     <!-- jQuery Core 3.6.3 -->
     <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
     <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- vtsForm -->
     <script src="vtsForm.js"></script>
 
     <!-- vtsForm CDN -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/raymarkeduarte/vtsForm@v1.0.1/vtsForm.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/raymarkeduarte/vtsForm@v1.1.1/vtsForm.js"></script> -->
 </head>
 <body>
     <div class="container">
         <h2>vtsForm - Validate with sweetalert2, then submit form using ajax</h2>
         <hr>
-        <form class="row g-3" novalidate>
+        <form action="action.php" method="post" class="row g-3" novalidate>
             <div class="col-md-4">
                 <label for="validationCustom01" class="form-label">First name</label>
                 <input type="text" class="form-control" id="validationCustom01" value="Raymark" required>

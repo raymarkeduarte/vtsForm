@@ -3,9 +3,9 @@
  * @author RED
  * @param {Element} form
  * @param {String} loadTitle
- * @param {String} loadHTML
+ * @param {String} loadText
  */
-function vtsForm(form, loadTitle, loadHTML){
+function vtsForm(form, loadTitle, loadText){
     const action = $(form).attr('action');
     const method = $(form).attr('method');
     const input = $(form).find('input');
@@ -41,11 +41,14 @@ function vtsForm(form, loadTitle, loadHTML){
                 const val = formData.get(name);
                 const conField = $(form).find('[name='+name+']')
                 if(conField.length === 0){
-                    Swal.fire({
+                    if(!Swal)
+                        Swal.fire({
                         title: 'vtsForm error!',
                         text: 'Plese check the prefix name of your "_confirmation" field.',
                         icon: 'error'
-                    });
+                        });
+                    else    
+                        alert('oks')
                 }
                 // compare
                 if(field[i].value != val){
@@ -63,14 +66,19 @@ function vtsForm(form, loadTitle, loadHTML){
                 let type = $(field[i]).attr('vtsWarn') || 'Invalid';
                 const title = (matchMsg) ? matchMsg : type + ' ' + fieldName(field[i]);
                 const note = field[i].title || '';
-                let icon = $(field[i]).attr('vtsIcon')  || 'warning';
-
-                field[i].focus()
-                Swal.fire({
+                const icon = $(field[i]).attr('vtsIcon')  || 'warning';
+                const swalObj = {
                     title: title,
                     text: note,
                     icon: icon
-                });
+                };
+                
+                field[i].focus()
+
+                if(window.swal.fire) Swal.fire(swalObj); // for sweetalert2
+                else swal(swalObj); // for sweetalert
+
+                
                 return false;
             }
         });
@@ -90,37 +98,63 @@ function vtsForm(form, loadTitle, loadHTML){
             contentType: false,
             cache: false,
             beforeSend: function() {
-                Swal.fire({
-                    title: loadTitle,
-                    html: loadHTML,
-                    allowEscapeKey: false,
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
+                if(window.swal.fire){ // for sweetalert2
+                    Swal.fire({
+                        title: loadTitle,
+                        text: loadText,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                }
+                else{ // for sweetalert
+                    swal({
+                        title: loadTitle,
+                        text: loadText,
+                        closeOnEsc: false,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    }); 
+                }
             },
             success: function(response) {
-                // Swal.hideLoading();
-                Swal.fire({
+                Swal.hideLoading();
+                const swalObjSuccess = {
                     title: response.title ?? 'Message: ',
                     text: response.text,
                     icon: response.icon
-                });
+                };
+                if(window.swal.fire) Swal.fire(swalObjSuccess); // for sweetalert2
+                else swal(swalObjSuccess); // for sweetalert
             },
             error: function(error, textStatus, errorThrown) {
                 const customError = error.responseJSON;
                 const hasCustomError = ('responseJSON' in error && 'title' in error.responseJSON);
                 let title = (hasCustomError) ? customError.title : textStatus+': '+error.status;
                 if(error.status === 0) title = 'Please check your connection.';
-                let html  = (hasCustomError) ? customError.text : errorThrown;
+                const html  = (hasCustomError) ? customError.text : errorThrown;
                 const icon  = (hasCustomError) ? customError.icon : 'error';
                 const cLog = error.responseText;
-                Swal.fire({
-                    title: title,
-                    html: html,
-                    icon: icon
-                });
+                
+                if(window.swal.fire){ // for sweetalert2
+                    Swal.fire({
+                        title: title,
+                        html: html,
+                        icon: icon
+                    });
+                }
+                else{ // for sweetalert
+                    swal({
+                        title: title,
+                        content: html,
+                        icon: icon
+                    });
+                } 
+
                 console.log(cLog);
             }
         });
