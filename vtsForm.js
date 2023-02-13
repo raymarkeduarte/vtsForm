@@ -23,12 +23,12 @@ function vtsForm(form, loadTitle, loadHTML){
         $.each(field, function(i, elem){
             /**
              * @description get the text of the 'this' field's sibling label or its placeholder
-             * @param {number} k
+             * @param {Element} f
              * @returns {string} 
              */
-            function fieldName(k){
-                const label = $(field[k]).siblings('label').first().text();
-                const fieldName = trimLabel( label || field[k].placeholder );
+            function fieldName(f){
+                const label = $(f).siblings('label').first().text();
+                const fieldName = trimLabel( label || $(f).attr('placeholder') );
                 return fieldName;
             }
 
@@ -38,10 +38,18 @@ function vtsForm(form, loadTitle, loadHTML){
                 // get the name of the field being compared
                 const name = field[i].name.slice(0, -13);
                 // get its value
-                let val = formData.get(name);
+                const val = formData.get(name);
+                const conField = $(form).find('[name='+name+']')
+                if(conField.length === 0){
+                    Swal.fire({
+                        title: 'vtsForm error!',
+                        text: 'Plese check the prefix name of your "_confirmation" field.',
+                        icon: 'error'
+                    });
+                }
                 // compare
                 if(field[i].value != val){
-                    matchMsg = fieldName(i)+' does not match '+fieldName(i-1);
+                    matchMsg = fieldName(field[i])+' does not match '+fieldName(conField);
                     field[i].setCustomValidity(matchMsg);
                 } else field[i].setCustomValidity('');
             }
@@ -53,7 +61,7 @@ function vtsForm(form, loadTitle, loadHTML){
             } else{
                 valid = false;
                 let type = $(field[i]).attr('vtsWarn') || 'Invalid';
-                const title = (matchMsg) ? matchMsg : type + ' ' + fieldName(i);
+                const title = (matchMsg) ? matchMsg : type + ' ' + fieldName(field[i]);
                 const note = field[i].title || '';
                 let icon = $(field[i]).attr('vtsIcon')  || 'warning';
 
