@@ -8,84 +8,72 @@
 function vtsForm(form, loadTitle, loadText){
     const action = $(form).attr('action');
     const method = $(form).attr('method');
-    const input = $(form).find('input');
-    const select = $(form).find('select');
-    const textarea = $(form).find('textarea');
-    const fields = [input, select, textarea];
+    const field = $(form).find('[name]');
     let valid = false;
     let matchMsg = '';
     let formData = new FormData();
 
-    $.each(fields, function(x, field){
-        // continue to the next field type if 'this' is empty.
-        if(field.length === 0) return;
+    $.each(field, function(i, elem){
+        /**
+         * @description get the text of the 'this' field's sibling label or its placeholder
+         * @param {Element} f
+         * @returns {string} 
+         */
+        function fieldName(f){
+            const label = $(f).siblings('label').first().text();
+            const fieldName = trimLabel( label || $(f).attr('placeholder') );
+            return fieldName;
+        }
 
-        $.each(field, function(i, elem){
-            /**
-             * @description get the text of the 'this' field's sibling label or its placeholder
-             * @param {Element} f
-             * @returns {string} 
-             */
-            function fieldName(f){
-                const label = $(f).siblings('label').first().text();
-                const fieldName = trimLabel( label || $(f).attr('placeholder') );
-                return fieldName;
+        const confirmPattern = /.*\_confirmation$/g;
+        const has_confirmation = (field[i].name.match(confirmPattern));
+        if(has_confirmation){
+            // get the name of the field being compared
+            const name = field[i].name.slice(0, -13);
+            // get its value
+            const val = formData.get(name);
+            const conField = $(form).find('[name='+name+']')
+            if(conField.length === 0){
+                if(!Swal)
+                    Swal.fire({
+                    title: 'vtsForm error!',
+                    text: 'Plese check the prefix name of your "_confirmation" field.',
+                    icon: 'error'
+                    });
+                else    
+                    alert('oks')
             }
+            // compare
+            if(field[i].value != val){
+                matchMsg = fieldName(field[i])+' does not match '+fieldName(conField);
+                field[i].setCustomValidity(matchMsg);
+            } else field[i].setCustomValidity('');
+        }
 
-            const confirmPattern = /.*\_confirmation$/g;
-            const has_confirmation = (field[i].name.match(confirmPattern));
-            if(has_confirmation){
-                // get the name of the field being compared
-                const name = field[i].name.slice(0, -13);
-                // get its value
-                const val = formData.get(name);
-                const conField = $(form).find('[name='+name+']')
-                if(conField.length === 0){
-                    if(!Swal)
-                        Swal.fire({
-                        title: 'vtsForm error!',
-                        text: 'Plese check the prefix name of your "_confirmation" field.',
-                        icon: 'error'
-                        });
-                    else    
-                        alert('oks')
-                }
-                // compare
-                if(field[i].value != val){
-                    matchMsg = fieldName(field[i])+' does not match '+fieldName(conField);
-                    field[i].setCustomValidity(matchMsg);
-                } else field[i].setCustomValidity('');
-            }
+        // check the validity of 'this' field
+        if(field[i].checkValidity()){
+            valid = true;
+            formData.append(field[i].name, field[i].value);
+        } else{
+            valid = false;
+            let type = $(field[i]).attr('vtsWarn') || 'Invalid';
+            const title = (matchMsg) ? matchMsg : type + ' ' + fieldName(field[i]);
+            const note = field[i].title || '';
+            const icon = $(field[i]).attr('vtsIcon')  || 'warning';
+            const swalObj = {
+                title: title,
+                text: note,
+                icon: icon
+            };
+            
+            field[i].focus()
 
-            // check the validity of 'this' field
-            if(field[i].checkValidity()){
-                valid = true;
-                formData.append(field[i].name, field[i].value);
-            } else{
-                valid = false;
-                let type = $(field[i]).attr('vtsWarn') || 'Invalid';
-                const title = (matchMsg) ? matchMsg : type + ' ' + fieldName(field[i]);
-                const note = field[i].title || '';
-                const icon = $(field[i]).attr('vtsIcon')  || 'warning';
-                const swalObj = {
-                    title: title,
-                    text: note,
-                    icon: icon
-                };
-                
-                field[i].focus()
+            if(window.swal.fire) Swal.fire(swalObj); // for sweetalert2
+            else swal(swalObj); // for sweetalert
 
-                if(window.swal.fire) Swal.fire(swalObj); // for sweetalert2
-                else swal(swalObj); // for sweetalert
-
-                
-                return false;
-            }
-        });
-
-        // break loop if 'this' input is invalid
-        if(!valid) return false;
-
+            
+            return false;
+        }
     });
 
     // AJAX
