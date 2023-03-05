@@ -119,45 +119,53 @@ function vtsForm(form, loadTitle, loadText){
                 if(window.swal.fire) Swal.fire(swalObjSuccess); // for sweetalert2
                 else swal(swalObjSuccess); // for sweetalert
             },
-            error: function(error, textStatus, errorThrown) {
-                const customError = error.responseJSON;
-                const hasCustomError = ('responseJSON' in error && 'title' in error.responseJSON);
-                let title = (hasCustomError) ? customError.title : textStatus+': '+error.status;
-                if(error.status === 0) title = 'Please check your connection.';
-                const html  = (hasCustomError) ? customError.text : errorThrown;
-                const icon  = (hasCustomError) ? customError.icon : 'error';
-                const cLog = error.responseText;
-                
-                if(window.swal.fire){ // for sweetalert2
-                    Swal.fire({
-                        title: title,
-                        html: html,
-                        icon: icon
-                    });
-                }
-                else{ // for sweetalert
-                    swal({
-                        title: title,
-                        content: html,
-                        icon: icon
-                    });
-                } 
-
-                console.log(cLog);
+            error: function(error, textStatus, errorThrown){
+                vtsError(error, textStatus, errorThrown);
             }
         });
     }
 }
 
 /**
- * @description trim and remove each non-word character at the end
+ * @description show error message with swal
+ * @param {object} error
+ * @param {string} textStatus
+ * @param {string} errorThrown
+ */
+function vtsError(error, textStatus, errorThrown){
+    const customError = error.responseJSON;
+    const hasCustomError = ('responseJSON' in error && 'title' in error.responseJSON);
+    const html  = (hasCustomError) ? customError.text : errorThrown;
+    const icon  = (hasCustomError) ? customError.icon : 'error';
+    const cLog = error.responseText;
+
+    let title = (hasCustomError) ? customError.title : textStatus+': '+error.status;
+    if(error.status === 0) title = 'Please check your connection.';
+
+    if(window.swal.fire){ // for sweetalert2
+        Swal.fire({
+            title: title,
+            html: html,
+            icon: icon
+        });
+    } else{ // for sweetalert
+        swal({
+            title: title,
+            content: html,
+            icon: icon
+        });
+    } 
+    console.log(cLog);
+}
+
+/**
+ * @description removes the non-word character at the end of a string
  * @param {string} label
  * @returns {string} 
  */
 function trimLabel(label){
-    while(label.match(/.*\W$/g)){
-        label = label.slice(0, -1)
-    }
+    if(label.match(/.*\W$/g))
+        label = label.trim().slice(0, -1)
     return label;
 }
 

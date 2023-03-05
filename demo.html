@@ -10,12 +10,9 @@
     
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- SweetAlert -->
-    <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
     
     <!-- vtsForm -->
-    <script src="vtsForm.js"></script>
+    <script src="vts.js" defer></script>
 
     <!-- vtsForm CDN -->
     <!-- <script src="https://cdn.jsdelivr.net/gh/raymarkeduarte/vtsForm@v2.0.0/vtsForm.js"></script> -->
@@ -24,17 +21,18 @@
     <div class="container">
         <h2>vtsForm - Validate with sweetalert2, then submit form using ajax</h2>
         <hr>
-        <form action="action.php" method="post" class="row g-3" novalidate>
+        <form action="action.php" method="post" class="row g-3"
+            vts vts-load-title="" vts-load-text="" vts-success="" vts-error="" vts-before="">
             <div class="col-md-4">
-                <label for="first_name" class="form-label">First name</label>
-                <input type="text" class="form-control" id="first_name" name="first_name" value="Raymark" required>
+                <label for="first_name" class="form-label">First name: </label>
+                <input type="text" title="" class="form-control" id="first_name" name="last_name" value="Raymark" required>
             </div>
             <div class="col-md-4">
-                <label for="last_name" class="form-label">Last name</label>
-                <input type="text" class="form-control" id="last_name" name="last_name" value="Dela Cruz" required>
+                <label for="last_name" class="form-label">Last name:</label>
+                <input type="text" class="form-control" id="last_name" name="last_name_confirmation" value="Dela Cruz" required>
             </div>
             <div class="col-md-4">
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label">Username:</label>
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">@</span>
                     <input type="text" class="form-control" placeholder="Username" id="username" name="username" required>
@@ -67,7 +65,7 @@
                 </div>
             </div>
             <div class="col-12">
-                <button class="btn btn-primary" vts type="button">Submit form</button>
+                <button class="btn btn-primary" type="submit">Submit form</button>
             </div>
         </form>
     </div>
