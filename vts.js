@@ -16,16 +16,18 @@ class Vts {
         this.action = form.attr('action');
         this.method = form.attr('method');
         this.fields = form.find('[name]');
-        this.before = config.before;
-        this.success = config.success;
-        this.error = config.error;
-        this.complete = config.complete;
+        if(config){
+            this.before = config.before;
+            this.success = config.success;
+            this.error = config.error;
+            this.complete = config.complete;
+        }
         this.validate();
     }
     alert(msg){
-        if(this.hasSwal())
+        if(this.hasSwal()){
             Swal.fire(msg);
-        else{
+        } else{
             if(msg.text) msg.text = ': '+msg.text
             alert(msg.title + msg.text);
         }
@@ -71,8 +73,9 @@ class Vts {
                 if(currentField.value != val){
                     this.matchMsg = this.getTitle(currentField)+' does not match '+this.getTitle(conField);
                     currentField.setCustomValidity(this.matchMsg);
-                } else
+                } else{
                     currentField.setCustomValidity('');
+                }
             }
         }
     }
@@ -84,7 +87,9 @@ class Vts {
                 text: response.text,
                 icon: response.icon
             });
-        } else alert('Success');
+        } else{
+            alert('Success');
+        }
     }
     errorPage(html){
         const newWindow = window.open();
@@ -98,7 +103,9 @@ class Vts {
         const cLog = error.responseText;
     
         let title = (hasCustomError) ? customError.title : textStatus+': '+error.status;
-        if(error.status === 0) title = 'Please check your connection.'; 
+        if(error.status === 0){
+            title = 'Please check your connection.';
+        }
         
         if(this.hasSwal()){
             Swal.fire({
@@ -113,13 +120,15 @@ class Vts {
             });
         } else{
             const text = title+'\nClick ok to view more details.'+"\n"+html;
-            if(confirm(text) == true) this.errorPage(cLog);
+            if(confirm(text) == true){
+                this.errorPage(cLog);
+            }
         }
         console.log(cLog);
     }   
     getTitle(field){
         const label = $(field).siblings('label').first().text();
-        let fieldName = label || $(field).attr('placeholder');
+        const fieldName = label || $(field).attr('placeholder');
         return this.trim(fieldName);
     }
     hasSwal(){
@@ -151,11 +160,10 @@ class Vts {
         });
     }
     trim(txt){
-        if(txt.match(/.*\W$/g))
-            txt = txt.trim().slice(0, -1)
+        if(txt.match(/.*\W$/g)) txt = txt.trim().slice(0, -1);
         return txt;
     }
-    validate() {
+    validate(){
         this.formElem.attr('novalidate', true);
         const $this = this;
         const formData = new FormData();
@@ -195,19 +203,14 @@ $(document).on('submit', '[vts]', function(e){
     const vs = $(this).attr('vts-success');
     const ve = $(this).attr('vts-error');
     const vc = $(this).attr('vts-complete');
-    const c = new Vts($(this), {
+    new Vts($(this), {
         loadTitle: lt,
         loadText: lx,
         before: vb,
-        beforeOverride: false,
         success: vs,
-        successOverride: false,
         error: ve,
-        failOverride: false,
-        beforeOverride: false,
-        loadingTitle: 'Testing....',
+        complete: vc
     });
-    console.log(c)
 });
 
 // novalidate
