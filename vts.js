@@ -142,6 +142,15 @@ class Vts {
         if(typeof window['swal'] === "function") return true;
         else return false;
     }
+    hasFunction(fn){
+        if(fn){
+            if(typeof window[fn] === "function"){
+                window[fn]();
+            } else{
+                console.error(fn + ' is not a window function');
+            }
+        } else return false;
+    }
     submit(){
         if(!this.valid) return false;
         const $this = this;
@@ -153,16 +162,24 @@ class Vts {
             contentType: false,
             cache: false,
             beforeSend: function(){
-                $this.beforeSend();
+                if(!$this.hasFunction($this.before)){
+                    $this.beforeSend();
+                }
             },
             success: function(response){
-                $this.done(response);
+                if(!$this.hasFunction($this.success)){
+                    $this.done(response);
+                }
             },
             error: function(error, textStatus, errorThrown){
-                $this.fail(error, textStatus, errorThrown);
+                if(!$this.hasFunction($this.error)){
+                    $this.fail(error, textStatus, errorThrown);
+                }
             },
             complete: function(){
-                $this.always();
+                if(!$this.hasFunction($this.complete)){
+                    $this.always();
+                }
             }
         });
     }
@@ -201,7 +218,8 @@ class Vts {
         }
     }
 }
-
+const vts = {};
+// vts.before = 'beforeSwal';
 // Event listener
 $(document).on('submit', '[vts]', function(e){
     e.preventDefault();
@@ -211,13 +229,13 @@ $(document).on('submit', '[vts]', function(e){
     const vs = $(this).attr('vts-success');
     const ve = $(this).attr('vts-error');
     const vc = $(this).attr('vts-complete');
-    const vts = new Vts($(this), {
-        loadTitle: lt,
-        loadText: lx,
-        before: vb,
-        success: vs,
-        error: ve,
-        complete: vc
+    new Vts($(this), {
+        loadTitle: vts.loadTitle || lt,
+        loadText: vts.loadText || lx,
+        before: vts.before || vb,
+        success: vts.success || vs,
+        error: vts.error || ve,
+        complete: vts.complete || vc
     });
 });
 
@@ -225,25 +243,31 @@ $(document).on('submit', '[vts]', function(e){
 $(document).ready(function(){ $('[vts]').attr('novalidate', true); });
 
 // test/
-function form1(){
-    const form1 = new Vts($('#form1'), {
-        delay: true
-    });
-    return form1;
+function beforeSwal(){
+    
+}
+function successSwal(){
+
+}
+function completeSwal(){
+
+}
+function errorSwal(){
+    
 }
 
 $(document).on('submit', '#form1', function(e){
     e.preventDefault();
     new Vts($('#form1'), { delay: true }).validate();
 });
+
 $(document).on('submit', '#form2', function(e){
     e.preventDefault();
-    const form1Data = new Vts($('#form1'), { delay: true }).formData;
+    const form1 = new Vts($('#form1'), { delay: true });
     const form2 = new Vts($('#form2'), { delay: true });
 
-    for (var pair of form1Data.entries()) {
+    for (var pair of form1.formData.entries()) {
         form2.formData.append(pair[0], pair[1]);
     }
-
-    form2.submit();
+    if(form1.valid) form2.submit();
 });
