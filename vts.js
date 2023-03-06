@@ -142,10 +142,10 @@ class Vts {
         if(typeof window['swal'] === "function") return true;
         else return false;
     }
-    hasFunction(fn){
+    hasFunction(fn, paramObJ){
         if(fn){
             if(typeof window[fn] === "function"){
-                window[fn]();
+                window[fn](paramObJ);
             } else{
                 console.error(fn + ' is not a window function');
             }
@@ -161,23 +161,26 @@ class Vts {
             processData: false,
             contentType: false,
             cache: false,
-            beforeSend: function(){
-                if(!$this.hasFunction($this.before)){
+            beforeSend: function(jqXHR){
+                if(!$this.hasFunction($this.before, {jqXHR: jqXHR})){
                     $this.beforeSend();
                 }
             },
-            success: function(response){
-                if(!$this.hasFunction($this.success)){
-                    $this.done(response);
+            success: function(data, jqXHR, textStatus){
+                const paramObJ = { data: data, jqXHR: jqXHR, textStatus: textStatus };
+                if(!$this.hasFunction($this.success, paramObJ)){
+                    $this.done(data);
                 }
             },
-            error: function(error, textStatus, errorThrown){
-                if(!$this.hasFunction($this.error)){
+            error: function(error, jqXHR, textStatus, errorThrown){
+                const paramObJ = {error: error, jqXHR: jqXHR, textStatus: textStatus, errorThrown: errorThrown};
+                if(!$this.hasFunction($this.error, paramObJ)){
                     $this.fail(error, textStatus, errorThrown);
                 }
             },
-            complete: function(){
-                if(!$this.hasFunction($this.complete)){
+            complete: function(jqXHR, textStatus){
+                const paramObJ = {jqXHR: jqXHR, textStatus: textStatus};
+                if(!$this.hasFunction($this.complete, paramObJ)){
                     $this.always();
                 }
             }
