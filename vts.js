@@ -238,10 +238,10 @@ $(document).on('submit', '#form1', function(e){
 });
 $(document).on('submit', '#form2', function(e){
     e.preventDefault();
-    const formData = new Vts($('#form1'), { delay: true }).formData;
+    const form1Data = new Vts($('#form1'), { delay: true }).formData;
     const form2 = new Vts($('#form2'), { delay: true });
 
-    for (var pair of formData.entries()) {
+    for (var pair of form1Data.entries()) {
         form2.formData.append(pair[0], pair[1]);
     }
 
