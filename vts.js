@@ -151,6 +151,18 @@ class Vts {
             }
         } else return false;
     }
+    invalid(){
+        this.valid = false;
+        const invalidTitle = $(this.currentField).attr('vts-invalid') || 'Invalid ' + this.getTitle(this.currentField);
+        const invalidIcon = $(this.currentField).attr('vts-invalid-icon') || 'warning';
+        let invalidHint = $(this.currentField).attr('title') || this.currentField.validationMessage || '';
+        this.currentField.focus();
+        this.alert({
+            title: invalidTitle,
+            icon: invalidIcon,
+            text: invalidHint
+        });
+    }
     submit(){
         if(!this.valid) return false;
         const $this = this;
@@ -203,16 +215,7 @@ class Vts {
                 $this.valid = true;
                 formData.append(field.name, field.value);
             } else{
-                $this.valid = false;
-                const invalidTitle = $(field).attr('vts-invalid') || 'Invalid ' + $this.getTitle(field);
-                const invalidIcon = $(field).attr('vts-invalid-icon') || 'warning';
-                let invalidHint = $(field).attr('title') || field.validationMessage || '';
-                field.focus();
-                $this.alert({
-                    title: invalidTitle,
-                    icon: invalidIcon,
-                    text: invalidHint
-                });
+                $this.invalid();
                 return false;
             }
         });
