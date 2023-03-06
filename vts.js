@@ -13,10 +13,13 @@ class Vts {
      */
     constructor(form, config) {
         this.formElem = form;
+        this.formData = new FormData();
         this.action = form.attr('action');
         this.method = form.attr('method');
         this.fields = form.find('[name]');
+        this.delay = false;
         if(config){
+            this.delay = config.delay;
             this.before = config.before;
             this.success = config.success;
             this.error = config.error;
@@ -54,7 +57,8 @@ class Vts {
             this.formElem.find('[type=submit]').text('Loading...');
         }
     }
-    confirmation(formData){
+    confirmation(){
+        const formData = this.formData;
         const currentField = this.currentField;
         const confirmPattern = /.*\_confirmation$/g;
         const has_confirmation = (currentField.name.match(confirmPattern));
@@ -78,6 +82,9 @@ class Vts {
                 }
             }
         }
+    }
+    delayed(){
+        return (this.delay === true) ? true : false;
     }
     done(response){
         if(this.hasSwal()){
@@ -135,13 +142,13 @@ class Vts {
         if(typeof window['swal'] === "function") return true;
         else return false;
     }
-    submit(formData){
+    submit(){
         if(!this.valid) return false;
         const $this = this;
         $.ajax({
             url: this.action,
             type: this.method,
-            data: formData,
+            data: this.formData,
             processData: false,
             contentType: false,
             cache: false,
@@ -164,9 +171,8 @@ class Vts {
         return txt;
     }
     validate(){
-        this.formElem.attr('novalidate', true);
         const $this = this;
-        const formData = new FormData();
+        const formData = this.formData;
 
         $.each(this.fields, function(i, field){
             $this.currentField = field;
@@ -190,7 +196,9 @@ class Vts {
                 return false;
             }
         });
-        this.submit(formData);
+        if(!this.delayed()){
+            this.submit(formData);
+        }
     }
 }
 
@@ -203,7 +211,7 @@ $(document).on('submit', '[vts]', function(e){
     const vs = $(this).attr('vts-success');
     const ve = $(this).attr('vts-error');
     const vc = $(this).attr('vts-complete');
-    new Vts($(this), {
+    const vts = new Vts($(this), {
         loadTitle: lt,
         loadText: lx,
         before: vb,
@@ -215,3 +223,27 @@ $(document).on('submit', '[vts]', function(e){
 
 // novalidate
 $(document).ready(function(){ $('[vts]').attr('novalidate', true); });
+
+// test/
+function form1(){
+    const form1 = new Vts($('#form1'), {
+        delay: true
+    });
+    return form1;
+}
+
+$(document).on('submit', '#form1', function(e){
+    e.preventDefault();
+    new Vts($('#form1'), { delay: true }).validate();
+});
+$(document).on('submit', '#form2', function(e){
+    e.preventDefault();
+    const formData = new Vts($('#form1'), { delay: true }).formData;
+    const form2 = new Vts($('#form2'), { delay: true });
+
+    for (var pair of formData.entries()) {
+        form2.formData.append(pair[0], pair[1]);
+    }
+
+    form2.submit();
+});

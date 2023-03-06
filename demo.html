@@ -21,25 +21,25 @@
     <div class="container">
         <h2>vtsForm - Validate with sweetalert2, then submit form using ajax</h2>
         <hr>
-        <form action="action.php" method="post" class="row g-3" vts>
+        <form action="action.php" method="post" class="row g-3" id="form1" novalidate>
             <div class="col-md-4">
                 <label for="first_name" class="form-label">First name: </label>
                 <input type="text" title="" class="form-control" id="first_name" name="last_name" value="Raymark" required>
             </div>
             <div class="col-md-4">
                 <label for="last_name" class="form-label">Last name:</label>
-                <input type="text" class="form-control" id="last_name" name="last_name_confirmation" value="Dela Cruz" required>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="Dela Cruz" required>
             </div>
             <div class="col-md-4">
                 <label for="username" class="form-label">Username:</label>
                 <div class="input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend">@</span>
-                    <input type="text" class="form-control" placeholder="Username" id="username" name="username" required>
+                    <input type="text" class="form-control" placeholder="Username" id="username" value="red" name="username" required>
                 </div>
             </div>
             <div class="col-md-6">
                 <label for="city" class="form-label">City</label>
-                <input type="text" class="form-control" id="city" name="city" required>
+                <input type="text" class="form-control" id="city" name="city" value="cabanatuan" required>
             </div>
             <div class="col-md-3">
                 <label for="state" class="form-label">State</label>
@@ -48,16 +48,62 @@
                     <option>My state</option>
                     <option>My state1</option>
                     <option>My state2</option>
-                    <option>My state3</option>
+                    <option selected>My state3</option>
                 </select>
             </div>
             <div class="col-md-3">
                 <label for="zip" class="form-label">Zip</label>
-                <input type="text" class="form-control" id="zip" name="zip" required>
+                <input type="text" class="form-control" id="zip" name="zip" required value="3100">
             </div>
             <div class="col-12">
                 <div class="form-check">
-                    <input class="form-check-input" vtsWarn="You must" type="checkbox" value="" id="terms" name="terms" required>
+                    <input class="form-check-input" vtsWarn="You must" type="checkbox" value="" id="terms" name="terms" required checked>
+                    <label class="form-check-label" for="terms">
+                        Agree to terms and conditions
+                    </label>
+                </div>
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Submit form</button>
+            </div>
+        </form>
+        <form action="action.php" method="post" class="row g-3" id="form2" novalidate>
+            <div class="col-md-4">
+                <label for="first_name" class="form-label">First name: </label>
+                <input type="text" title="" class="form-control" id="first_name" name="last_name" value="Raymark" required>
+            </div>
+            <div class="col-md-4">
+                <label for="last_name" class="form-label">Last name:</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="Dela Cruz" required>
+            </div>
+            <div class="col-md-4">
+                <label for="username" class="form-label">Username:</label>
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                    <input type="text" class="form-control" placeholder="Username" id="username" value="red" name="username" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="city" class="form-label">City</label>
+                <input type="text" class="form-control" id="city" name="city" value="cabanatuan" required>
+            </div>
+            <div class="col-md-3">
+                <label for="state" class="form-label">State</label>
+                <select class="form-select" id="state" name="state" required>
+                    <option selected disabled value="">Choose...</option>
+                    <option>My state</option>
+                    <option>My state1</option>
+                    <option>My state2</option>
+                    <option selected>My state3</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="zip" class="form-label">Zip</label>
+                <input type="text" class="form-control" id="zip" name="zip" required value="3100">
+            </div>
+            <div class="col-12">
+                <div class="form-check">
+                    <input class="form-check-input" vtsWarn="You must" type="checkbox" value="" id="terms" name="terms" required checked>
                     <label class="form-check-label" for="terms">
                         Agree to terms and conditions
                     </label>
